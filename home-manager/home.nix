@@ -1,4 +1,4 @@
-{ username, ... }:
+{ username, config, ... }:
 {
   home-manager = {
     backupFileExtension = "bkup";
@@ -20,14 +20,10 @@
 
         # Additional Packages
         home.packages = with pkgs; [
-          # Cursor AI Editor
-          code-cursor
-          vscode
           bun
           deno
           go
           act # GitHub Actions Toolkit
-          discord
           mise
           lazygit
           ripgrep
@@ -42,13 +38,22 @@
           nixfmt
           nh
           nix-output-monitor
+        ] ++ lib.optionals config.custom.gui.enable [
+          # GUI Editors
+          code-cursor
+          vscode
+          discord
         ];
 
-        home.sessionVariables = {
-          EDITOR = "code --wait";
-          BROWSER = "google-chrome";
-          TERMINAL = "ghostty";
-        };
+        home.sessionVariables = lib.mkMerge [
+          {
+            EDITOR = if config.custom.gui.enable then "code --wait" else "vim";
+          }
+          (lib.mkIf config.custom.gui.enable {
+            BROWSER = "google-chrome";
+            TERMINAL = "ghostty";
+          })
+        ];
 
         programs.eza = {
           enable = true;
@@ -60,7 +65,7 @@
           ];
         };
 
-        programs.ghostty = {
+        programs.ghostty = lib.mkIf config.custom.gui.enable {
           enable = true;
           # Only install the package on Linux; on macOS it's installed via Homebrew
           package = if pkgs.stdenv.isLinux then pkgs.ghostty else null;

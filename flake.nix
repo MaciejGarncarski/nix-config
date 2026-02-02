@@ -23,10 +23,11 @@
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
 
       nixosConfigurations = {
-        desktop = nixpkgs.lib.nixosSystem rec {
+        nix-os = nixpkgs.lib.nixosSystem rec {
           system = "x86_64-linux";
           specialArgs = {
             username = "maciek";
+            inputs = inputs;
           };
           modules = [
             home-manager.nixosModules.home-manager
@@ -36,7 +37,47 @@
               home-manager.extraSpecialArgs = specialArgs;
             }
             ./home-manager/home.nix
-            ./modules/default.nix
+            ./hosts/nix-os/configuration.nix
+            nix-flatpak.nixosModules.nix-flatpak
+            { nixpkgs.config.allowUnfree = true; }
+          ];
+        };
+
+        vm-nix-os = nixpkgs.lib.nixosSystem rec {
+          system = "x86_64-linux";
+          specialArgs = {
+            username = "maciek";
+            inputs = inputs;
+          };
+          modules = [
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = specialArgs;
+            }
+            ./home-manager/home.nix
+            ./hosts/vm-nix-os/configuration.nix
+            nix-flatpak.nixosModules.nix-flatpak
+            { nixpkgs.config.allowUnfree = true; }
+          ];
+        };
+
+        nix-server = nixpkgs.lib.nixosSystem rec {
+          system = "x86_64-linux";
+          specialArgs = {
+            username = "maciek";
+            inputs = inputs;
+          };
+          modules = [
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = specialArgs;
+            }
+            ./home-manager/home.nix
+            ./hosts/nix-server/configuration.nix
             nix-flatpak.nixosModules.nix-flatpak
             { nixpkgs.config.allowUnfree = true; }
           ];

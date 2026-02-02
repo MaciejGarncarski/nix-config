@@ -6,9 +6,8 @@
     ./user.nix
     ./docker.nix
     ./flatpak.nix
-    ./nvidia.nix
-    ./obs.nix
     ./packages.nix
     ./zsh.nix
+    ./gui.nix
   ];
 }

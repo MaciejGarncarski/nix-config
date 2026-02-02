@@ -5,12 +5,6 @@
   ...
 }:
 {
-  imports = [
-    # Include the results of the hardware scan.
-    ../hardware-configuration.nix
-  ];
-
-  networking.hostName = "mcg";
   networking.networkmanager.enable = true;
 
   # Set your time zone.
@@ -47,8 +41,6 @@
     dates = "weekly";
     options = "--delete-older-than 30d";
   };
-
-  custom.bootLoader = "systemd-boot";
 
   nix.settings.auto-optimise-store = true;
 

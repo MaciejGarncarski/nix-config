@@ -1,11 +1,13 @@
 {
   pkgs,
+  config,
+  lib,
   ...
 }:
 {
   programs = {
     firefox.enable = false; # Firefox is not installed by default
-    dconf.enable = true;
+    dconf.enable = lib.mkIf config.custom.gui.enable true;
     fuse.userAllowOther = true;
     mtr.enable = true;
     gnupg.agent = {
@@ -27,19 +29,21 @@
     docker-compose
     btop
     killall
-    libnotify
     lshw
     fastfetch
     unrar
     unzip
     wget
-    vlc # Media player
-    kdePackages.kdenlive # Video editor
-    kdePackages.filelight # Disk usage analyzer
-    handbrake # Video converter
-    ffmpegthumbnailer # Video thumbnails in Dolphin
     ffmpeg # Video processing
     imagemagick # Image processing
+    python3 # Required for Node.js ./configure
+    gcc # Required for compiling native modules
+    gnumake # Required for building
+    pkg-config # Helps find libraries
+  ] ++ lib.optionals config.custom.gui.enable [
+    libnotify
+    vlc # Media player
+    handbrake # Video converter
     easyeffects # Audio effects processor
     ytmdl
     onlyoffice-desktopeditors
@@ -49,10 +53,6 @@
     (pkgs.google-chrome.override {
       commandLineArgs = "--password-store=basic";
     })
-    python3 # Required for Node.js ./configure
-    gcc # Required for compiling native modules
-    gnumake # Required for building
-    pkg-config # Helps find libraries
   ];
 
   # nix-ld for unpached libraries
@@ -69,9 +69,4 @@
     libxcrypt-legacy
   ];
 
-  # remove unused packages
-  environment.plasma6.excludePackages = with pkgs; [
-    pkgs.kdePackages.konsole
-    pkgs.kdePackages.elisa
-  ];
 }
