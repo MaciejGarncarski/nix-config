@@ -1,4 +1,4 @@
-{ username, config, ... }:
+{ username, config, guiEnabled ? true, ... }:
 {
   home-manager = {
     backupFileExtension = "bkup";
@@ -38,7 +38,7 @@
           nixfmt
           nh
           nix-output-monitor
-        ] ++ lib.optionals config.custom.gui.enable [
+        ] ++ lib.optionals guiEnabled [
           # GUI Editors
           code-cursor
           vscode
@@ -47,9 +47,9 @@
 
         home.sessionVariables = lib.mkMerge [
           {
-            EDITOR = if config.custom.gui.enable then "code --wait" else "vim";
+            EDITOR = if guiEnabled then "code --wait" else "vim";
           }
-          (lib.mkIf config.custom.gui.enable {
+          (lib.mkIf guiEnabled {
             BROWSER = "google-chrome";
             TERMINAL = "ghostty";
           })
@@ -65,7 +65,7 @@
           ];
         };
 
-        programs.ghostty = lib.mkIf config.custom.gui.enable {
+        programs.ghostty = lib.mkIf guiEnabled {
           enable = true;
           # Only install the package on Linux; on macOS it's installed via Homebrew
           package = if pkgs.stdenv.isLinux then pkgs.ghostty else null;

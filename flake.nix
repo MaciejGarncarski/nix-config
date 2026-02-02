@@ -28,6 +28,7 @@
           specialArgs = {
             username = "maciek";
             inputs = inputs;
+            guiEnabled = true;
           };
           modules = [
             home-manager.nixosModules.home-manager
@@ -48,6 +49,7 @@
           specialArgs = {
             username = "maciek";
             inputs = inputs;
+            guiEnabled = true;
           };
           modules = [
             home-manager.nixosModules.home-manager
@@ -68,6 +70,7 @@
           specialArgs = {
             username = "maciek";
             inputs = inputs;
+            guiEnabled = false;
           };
           modules = [
             home-manager.nixosModules.home-manager

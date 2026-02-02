@@ -7,7 +7,7 @@
 {
   programs = {
     firefox.enable = false; # Firefox is not installed by default
-    dconf.enable = lib.mkIf config.custom.gui.enable true;
+    dconf.enable = lib.mkDefault (config.custom.gui.enable or false);
     fuse.userAllowOther = true;
     mtr.enable = true;
     gnupg.agent = {
@@ -40,7 +40,7 @@
     gcc # Required for compiling native modules
     gnumake # Required for building
     pkg-config # Helps find libraries
-  ] ++ lib.optionals config.custom.gui.enable [
+  ] ++ lib.optionals (config.custom.gui.enable or false) [
     libnotify
     vlc # Media player
     handbrake # Video converter
