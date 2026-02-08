@@ -29,6 +29,10 @@
           origin = "flathub";
         }
         {
+          appId = "fr.handbrake.ghb";
+          origin = "flathub";
+        }
+        {
           appId = "com.github.tchx84.Flatseal";
           origin = "flathub";
         }

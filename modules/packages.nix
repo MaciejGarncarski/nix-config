@@ -43,7 +43,6 @@
   ] ++ lib.optionals (config.custom.gui.enable or false) [
     libnotify
     vlc # Media player
-    handbrake # Video converter
     easyeffects # Audio effects processor
     ytmdl
     onlyoffice-desktopeditors
