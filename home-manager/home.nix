@@ -42,6 +42,7 @@
           # GUI Editors
           code-cursor
           vscode
+          zed-editor
           discord
         ];
 
