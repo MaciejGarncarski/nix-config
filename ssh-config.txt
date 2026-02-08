@@ -1,0 +1,12 @@
+# GitHub account
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519_github
+
+# VPS account
+Host vps
+    HostName 57.128.195.161
+    User XXX
+    Port XXX
+    IdentityFile ~/.ssh/id_ed25519_vps
