@@ -1,4 +1,9 @@
-{ username, config, guiEnabled ? true, ... }:
+{
+  username,
+  config,
+  guiEnabled ? true,
+  ...
+}:
 {
   home-manager = {
     backupFileExtension = "bkup";
@@ -19,32 +24,35 @@
         home.file.".p10k.zsh".source = ./p10k.zsh;
 
         # Additional Packages
-        home.packages = with pkgs; [
-          bun
-          deno
-          go
-          act # GitHub Actions Toolkit
-          mise
-          lazygit
-          ripgrep
-          uv
-          lazydocker
-          fd
-          zoxide
-          fzf
-          tree
-          tldr
-          diff-so-fancy
-          nixfmt
-          nh
-          nix-output-monitor
-        ] ++ lib.optionals guiEnabled [
-          # GUI Editors
-          code-cursor
-          vscode
-          zed-editor
-          discord
-        ];
+        home.packages =
+          with pkgs;
+          [
+            bun
+            deno
+            go
+            act # GitHub Actions Toolkit
+            mise
+            lazygit
+            ripgrep
+            uv
+            lazydocker
+            fd
+            zoxide
+            fzf
+            tree
+            tldr
+            diff-so-fancy
+            nixfmt
+            nh
+            nix-output-monitor
+          ]
+          ++ lib.optionals guiEnabled [
+            # GUI Editors
+            code-cursor
+            vscode
+            zed-editor
+            discord
+          ];
 
         home.sessionVariables = lib.mkMerge [
           {

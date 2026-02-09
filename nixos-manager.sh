@@ -56,14 +56,61 @@ show_main_menu() {
     echo -e "${BOLD}Main Menu:${NC}"
     echo ""
     echo "  1) Build & Switch Configuration"
-    echo "  2) Update Flake Inputs"
-    echo "  3) Check Flake"
-    echo "  4) Garbage Collection"
-    echo "  5) Show System Info"
-    echo "  6) Format Nix Files"
+    echo "  2) Update System Packages"
+    echo "  3) Update Flake Inputs"
+    echo "  4) Check Flake"
+    echo "  5) Garbage Collection"
+    echo "  6) Show System Info"
+    echo "  7) Format Nix Files"
     echo "  0) Exit"
     echo ""
     echo -n "Select option: "
+}
+
+# Update system packages
+update_system_packages() {
+    print_header
+    echo -e "${BOLD}Update System Packages:${NC}"
+    echo ""
+    echo "Available hosts:"
+    for i in "${!AVAILABLE_HOSTS[@]}"; do
+        echo "  $((i+1))) ${AVAILABLE_HOSTS[$i]}"
+    done
+    echo "  0) Back to main menu"
+    echo ""
+    echo -n "Select host: "
+
+    read -r choice
+
+    if [ "$choice" = "0" ]; then
+        return
+    fi
+
+    if [[ $choice =~ ^[1-9]$ ]] && [ "$choice" -le "${#AVAILABLE_HOSTS[@]}" ]; then
+        local host="${AVAILABLE_HOSTS[$((choice-1))]}"
+        print_header
+        echo -e "${BOLD}Updating system packages for: ${CYAN}$host${NC}"
+        echo ""
+
+        cd "$FLAKE_DIR" || exit 1
+
+        print_info "Running nixos-rebuild switch --upgrade --flake .#$host"
+        echo ""
+
+        if sudo nixos-rebuild switch --upgrade --flake ".#$host"; then
+            echo ""
+            print_success "System packages updated successfully!"
+        else
+            echo ""
+            print_error "Update failed!"
+        fi
+
+        press_any_key
+    else
+        print_error "Invalid host selection"
+        sleep 1
+        update_system_packages
+    fi
 }
 
 # Build menu
@@ -334,8 +381,8 @@ format_nix_files() {
     
     print_info "Formatting all .nix files..."
     echo ""
-    
-    if nix fmt; then
+
+    if nix fmt -- **/*.nix; then
         echo ""
         print_success "All files formatted successfully!"
     else
@@ -401,18 +448,21 @@ main() {
                 handle_build_menu
                 ;;
             2)
-                update_flake
+                update_system_packages
                 ;;
             3)
-                check_flake
+                update_flake
                 ;;
             4)
-                garbage_collection
+                check_flake
                 ;;
             5)
-                show_system_info
+                garbage_collection
                 ;;
             6)
+                show_system_info
+                ;;
+            7)
                 format_nix_files
                 ;;
             0)
