@@ -51,6 +51,7 @@
       onlyoffice-desktopeditors
       obsidian
       bruno
+      ladybird
       google-chrome
       (pkgs.google-chrome.override {
         commandLineArgs = "--password-store=basic";

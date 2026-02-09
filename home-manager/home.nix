@@ -21,7 +21,20 @@
       {
         home.stateVersion = "25.11";
 
-        home.file.".p10k.zsh".source = ./p10k.zsh;
+        home.file = lib.mkMerge [
+          {
+            ".p10k.zsh".source = ./p10k.zsh;
+          }
+          (lib.mkIf guiEnabled {
+            ".config/autostart/discord.desktop".text = ''
+              [Desktop Entry]
+              Type=Application
+              Name=Discord
+              Exec=discord
+              X-GNOME-Autostart-enabled=true
+            '';
+          })
+        ];
 
         # Additional Packages
         home.packages =
