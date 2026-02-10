@@ -54,7 +54,11 @@
       ladybird
       google-chrome
       (pkgs.google-chrome.override {
-        commandLineArgs = "--password-store=basic";
+        commandLineArgs = [
+          "--password-store=basic"
+          "--enable-features=UseOzonePlatform"
+          "--ozone-platform=wayland"
+        ];
       })
     ];
 
